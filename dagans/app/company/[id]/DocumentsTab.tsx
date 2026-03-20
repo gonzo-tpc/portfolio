@@ -1,7 +1,7 @@
 'use client'
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import * as XLSX from 'xlsx'
+// xlsx loaded dynamically to avoid SSR issues
 
 interface UploadedDoc {
   name: string
@@ -17,18 +17,19 @@ interface ParsedCapTable {
   rows: Record<string, string | number>[]
 }
 
-function parseSheet(file: File): Promise<ParsedCapTable | null> {
+async function parseSheet(file: File): Promise<ParsedCapTable | null> {
   return new Promise((resolve) => {
     const reader = new FileReader()
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       try {
+        const XLSX = await import('xlsx')
         const data = e.target?.result
         const wb = XLSX.read(data, { type: 'binary' })
         const ws = wb.Sheets[wb.SheetNames[0]]
         const json = XLSX.utils.sheet_to_json<Record<string, string | number>>(ws, { defval: '' })
         if (!json.length) return resolve(null)
         const headers = Object.keys(json[0])
-        resolve({ headers, rows: json.slice(0, 50) }) // cap at 50 rows for display
+        resolve({ headers, rows: json.slice(0, 50) })
       } catch {
         resolve(null)
       }
