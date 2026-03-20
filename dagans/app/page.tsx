@@ -3,7 +3,7 @@ import { getFunds, getCompanies, getFundMetrics } from '@/lib/db'
 
 function fmt(n: number) { return n >= 1e6 ? '$' + (n/1e6).toFixed(1) + 'M' : '$' + n.toLocaleString() }
 
-export const revalidate = 60 // refresh every 60s
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   const funds = await getFunds()

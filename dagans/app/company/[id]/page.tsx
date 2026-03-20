@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import CompanyTabs from './CompanyTabs'
 import ErrorBoundary from './ErrorBoundary'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 function fmt(n: number) {
   if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M'

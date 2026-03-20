@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { getFunds, getCompanies } from '@/lib/db'
 import { notFound } from 'next/navigation'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 function fmt(n: number) {
   if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M'
