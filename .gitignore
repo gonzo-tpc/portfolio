@@ -1,0 +1,12 @@
+# OpenClaw workspace files - don't commit these
+SOUL.md
+USER.md
+IDENTITY.md
+AGENTS.md
+TOOLS.md
+HEARTBEAT.md
+BOOTSTRAP.md
+MEMORY.md
+memory/
+.openclaw/
+.DS_Store
