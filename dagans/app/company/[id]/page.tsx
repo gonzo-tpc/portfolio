@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { companies, investments as allInv } from '@/lib/seed-data'
 import { notFound } from 'next/navigation'
 import CompanyTabs from './CompanyTabs'
+import ErrorBoundary from './ErrorBoundary'
 
 function fmt(n: number) {
   if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M'
@@ -65,7 +66,9 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
       </div>
 
       <div style={{ background: '#13131a', border: '1px solid #2a2a3a', borderRadius: 12, padding: 24 }}>
-        <CompanyTabs company={co} investments={investments} companyId={co.id} />
+        <ErrorBoundary>
+          <CompanyTabs company={co} investments={investments} companyId={co.id} />
+        </ErrorBoundary>
       </div>
     </div>
   )
