@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getFunds, getCompanies } from '@/lib/db'
 import { notFound } from 'next/navigation'
+import NewCompanyButton from './NewCompanyButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -50,7 +51,10 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
         ))}
       </div>
 
-      <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>Portfolio</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 700 }}>Portfolio</h2>
+        <NewCompanyButton fundId={id} />
+      </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 12 }}>
         {companies.map(co => {
           const color = SC[co.sector] || '#8888aa'
