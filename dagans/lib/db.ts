@@ -2,32 +2,39 @@ import { supabase } from './supabase'
 import { Company, Fund, Investment, FundMetrics } from '@/types'
 
 export async function getFunds(): Promise<Fund[]> {
-  const { data, error } = await supabase.from('funds').select('*').order('vintage_year')
-  if (error) throw error
-  return data || []
+  try {
+    const { data, error } = await supabase.from('funds').select('*').order('vintage_year')
+    if (error) { console.error('getFunds:', error); return [] }
+    return data || []
+  } catch (e) { console.error('getFunds:', e); return [] }
 }
 
 export async function getCompanies(fundId?: string): Promise<Company[]> {
-  let query = supabase.from('companies').select('*').order('name')
-  if (fundId) query = query.eq('fund_id', fundId)
-  const { data, error } = await query
-  if (error) throw error
-  return data || []
+  try {
+    let query = supabase.from('companies').select('*').order('name')
+    if (fundId) query = query.eq('fund_id', fundId)
+    const { data, error } = await query
+    if (error) { console.error('getCompanies:', error); return [] }
+    return data || []
+  } catch (e) { console.error('getCompanies:', e); return [] }
 }
 
 export async function getCompany(id: string): Promise<Company | null> {
-  const { data, error } = await supabase.from('companies').select('*').eq('id', id).single()
-  if (error) return null
-  return data
+  try {
+    const { data, error } = await supabase.from('companies').select('*').eq('id', id).single()
+    if (error) return null
+    return data
+  } catch (e) { console.error('getCompany:', e); return null }
 }
 
 export async function getInvestments(companyId: string): Promise<Investment[]> {
+  try {
   const { data: invData, error: invError } = await supabase
     .from('investments')
     .select('*')
     .eq('company_id', companyId)
     .order('date')
-  if (invError) throw invError
+  if (invError) { console.error('getInvestments:', invError); return [] }
 
   const investments = invData || []
 
@@ -50,6 +57,7 @@ export async function getInvestments(companyId: string): Promise<Investment[]> {
     ...inv,
     co_investors: ciMap[inv.id] || [],
   }))
+  } catch (e) { console.error('getInvestments:', e); return [] }
 }
 
 export async function getFundMetrics(fundId: string): Promise<FundMetrics> {
