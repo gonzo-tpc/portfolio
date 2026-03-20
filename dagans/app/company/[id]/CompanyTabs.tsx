@@ -15,7 +15,7 @@ function fmt(n: number) {
 const TABS = ['Investment History', 'Co-Investors', 'Cap Table', 'Sensitivity', 'Documents']
 const SC = ['#818cf8','#60a5fa','#f59e0b','#f87171','#34d399','#e879f9']
 
-export default function CompanyTabs({ company, investments }: { company: Company, investments: Investment[], companyId: string }) {
+export default function CompanyTabs({ company, investments, companyId }: { company: Company, investments: Investment[], companyId: string }) {
   const [tab, setTab] = useState('Investment History')
   const [hoveredInv, setHoveredInv] = useState<string|null>(null)
   const [newRound, setNewRound] = useState(20000000)

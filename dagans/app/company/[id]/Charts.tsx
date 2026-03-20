@@ -26,7 +26,7 @@ export function InvestmentBarChart({ investments }: { investments: Investment[] 
           <Tooltip
             contentStyle={{ background: '#13131a', border: '1px solid #2a2a3a', borderRadius: 8 }}
             labelStyle={{ color: '#f0f0f5', marginBottom: 4 }}
-            formatter={(value: number) => fmt(value)}
+            formatter={(value) => fmt(Number(value))}
           />
           <Legend wrapperStyle={{ color: '#8888aa', fontSize: 12 }} />
           <Bar dataKey="Invested" fill="#3b82f6" radius={[4,4,0,0]} />
@@ -61,7 +61,7 @@ export function OwnershipChart({ investments }: { investments: Investment[] }) {
           <Tooltip
             contentStyle={{ background: '#13131a', border: '1px solid #2a2a3a', borderRadius: 8 }}
             labelStyle={{ color: '#f0f0f5', marginBottom: 4 }}
-            formatter={(value: number) => value.toFixed(2) + '%'}
+            formatter={(value) => Number(value).toFixed(2) + '%'}
           />
           <Legend wrapperStyle={{ color: '#8888aa', fontSize: 12 }} />
           <Line type="monotone" dataKey="This Round" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6', r: 4 }} activeDot={{ r: 6 }} />
@@ -89,7 +89,7 @@ export function MoicChart({ investments }: { investments: Investment[] }) {
           <Tooltip
             contentStyle={{ background: '#13131a', border: '1px solid #2a2a3a', borderRadius: 8 }}
             labelStyle={{ color: '#f0f0f5', marginBottom: 4 }}
-            formatter={(value: number) => value.toFixed(2) + 'x'}
+            formatter={(value) => Number(value).toFixed(2) + 'x'}
           />
           <Bar dataKey="moic" radius={[4,4,0,0]}>
             {data.map((entry, index) => (
