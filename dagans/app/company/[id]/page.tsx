@@ -1,8 +1,10 @@
 import Link from 'next/link'
-import { companies, investments as allInv } from '@/lib/seed-data'
+import { getCompany, getInvestments } from '@/lib/db'
 import { notFound } from 'next/navigation'
 import CompanyTabs from './CompanyTabs'
 import ErrorBoundary from './ErrorBoundary'
+
+export const revalidate = 60
 
 function fmt(n: number) {
   if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M'
@@ -19,13 +21,15 @@ const SC: Record<string,string> = {
 
 export default async function CompanyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const co = companies.find(c => c.id === id)
+  const [co, investments] = await Promise.all([getCompany(id), getInvestments(id)])
   if (!co) notFound()
-  const investments = allInv[co.id] || []
-  const totalCivShares = investments.reduce((sum, inv) => sum + inv.civ_shares, 0)
+
+  const totalCivShares = investments.reduce((sum, inv) => sum + Number(inv.civ_shares), 0)
   const latestInv = investments[investments.length - 1]
-  const currentOwnership = latestInv ? ((totalCivShares / (latestInv.post_money_valuation / latestInv.pps)) * 100).toFixed(2) + "%" : "N/A"
-  const color = SC[co.sector] || '#8888aa'
+  const currentOwnership = latestInv
+    ? ((totalCivShares / (Number(latestInv.post_money_valuation) / Number(latestInv.pps))) * 100).toFixed(2) + '%'
+    : 'N/A'
+  const color = SC[co.sector || ''] || '#8888aa'
 
   return (
     <div>
@@ -48,14 +52,14 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12, marginBottom: 32 }}>
         {([
-          ['Total Invested', fmt(co.total_invested), ''],
-          ['Current Mark', fmt(co.current_mark), ''],
-          ['Entry Valuation', fmt(co.entry_valuation), ''],
-          ['Current Valuation', fmt(co.current_valuation), ''],
-          ['MOIC', co.moic.toFixed(2) + 'x', co.moic >= 1 ? '#22c55e' : '#f87171'],
-          ['IRR', (co.irr * 100).toFixed(1) + '%', co.irr >= 0 ? '#22c55e' : '#f87171'],
-          ['First Investment', co.initial_investment_date, ''],
-          ['Latest Investment', co.latest_investment_date, ''],
+          ['Total Invested', fmt(Number(co.total_invested)), ''],
+          ['Current Mark', fmt(Number(co.current_mark)), ''],
+          ['Entry Valuation', fmt(Number(co.entry_valuation)), ''],
+          ['Current Valuation', fmt(Number(co.current_valuation)), ''],
+          ['MOIC', Number(co.moic).toFixed(2) + 'x', Number(co.moic) >= 1 ? '#22c55e' : '#f87171'],
+          ['IRR', (Number(co.irr) * 100).toFixed(1) + '%', Number(co.irr) >= 0 ? '#22c55e' : '#f87171'],
+          ['First Investment', co.initial_investment_date || '', ''],
+          ['Latest Investment', co.latest_investment_date || '', ''],
           ['Current Ownership', currentOwnership, '#22c55e'],
         ] as [string, string, string][]).map(([label, value, clr]) => (
           <div key={label} style={{ background: '#13131a', border: '1px solid #2a2a3a', borderRadius: 10, padding: 16 }}>
