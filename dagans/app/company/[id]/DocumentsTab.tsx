@@ -1,5 +1,5 @@
 'use client'
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import * as XLSX from 'xlsx'
 
@@ -74,8 +74,7 @@ export default function DocumentsTab({ companyId }: { companyId: string }) {
     setLoadedOnce(true)
   }, [companyId])
 
-  // Load on first render
-  if (!loadedOnce && !loading) loadDocs()
+  useEffect(() => { loadDocs() }, [loadDocs])
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || !files.length) return
