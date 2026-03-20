@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Company, Investment } from '@/types'
 
 import { InvestmentBarChart, OwnershipChart, MoicChart } from './Charts'
@@ -51,8 +51,8 @@ export default function CompanyTabs({ company, investments, companyId }: { compa
             </thead>
             <tbody>
               {investments.map(investment => (
-                <>
-                  <tr key={investment.id} onMouseEnter={() => setHoveredInv(investment.id)} onMouseLeave={() => setHoveredInv(null)}
+                <React.Fragment key={investment.id}>
+                  <tr onMouseEnter={() => setHoveredInv(investment.id)} onMouseLeave={() => setHoveredInv(null)}
                     style={{ borderBottom: '1px solid #2a2a3a', background: hoveredInv===investment.id ? '#1c1c26' : 'transparent', cursor: 'pointer' }}>
                     <td style={{ padding: 12, fontWeight: 600 }}>{investment.round_name}</td>
                     <td style={{ padding: 12, color: '#8888aa' }}>{investment.date}</td>
@@ -69,7 +69,7 @@ export default function CompanyTabs({ company, investments, companyId }: { compa
                     <td style={{ padding: 12, color: investment.irr>=0?'#22c55e':'#f87171' }}>{(investment.irr*100).toFixed(1)}%</td>
                   </tr>
                   {hoveredInv===investment.id && (
-                    <tr key={investment.id+'-ci'} style={{ background: '#16161f' }}>
+                    <tr style={{ background: '#16161f' }}>
                       <td colSpan={13} style={{ padding: '8px 12px 14px' }}>
                         <div style={{ fontSize: 12, color: '#8888aa', marginBottom: 6 }}>Co-investors:</div>
                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -80,7 +80,7 @@ export default function CompanyTabs({ company, investments, companyId }: { compa
                       </td>
                     </tr>
                   )}
-                </>
+                </React.Fragment>
               ))}
             </tbody>
           </table>
