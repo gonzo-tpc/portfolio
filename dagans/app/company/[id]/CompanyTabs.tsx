@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Company, Investment } from '@/types'
 
-import { InvestmentBarChart, OwnershipChart, MoicChart } from './Charts'
+import { InvestmentBarChart, OwnershipChart } from './Charts'
 import DocumentsTab from './DocumentsTab'
 import TeamTab from './TeamTab'
 
@@ -91,9 +91,7 @@ export default function CompanyTabs({ company, investments, companyId }: { compa
           <InvestmentBarChart investments={investments} />
           <OwnershipChart investments={investments} />
         </div>
-        <div style={{ marginTop: 24 }}>
-      <MoicChart investments={investments} />
-    </div>
+
 
   </div>
 )}
