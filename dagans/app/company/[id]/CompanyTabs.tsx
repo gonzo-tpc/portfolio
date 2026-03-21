@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Company, Investment } from '@/types'
 
-import { InvestmentBarChart, OwnershipChart } from './Charts'
+import { InvestmentBarChart } from './Charts'
 import DocumentsTab from './DocumentsTab'
 import TeamTab from './TeamTab'
 
@@ -87,9 +87,23 @@ export default function CompanyTabs({ company, investments, companyId }: { compa
           </table>
         </div>
         
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginTop: 32, paddingTop: 24, borderTop: '1px solid #2a2a3a' }}>
+        <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid #2a2a3a', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'center' }}>
           <InvestmentBarChart investments={investments} />
-          <OwnershipChart investments={investments} />
+          <div style={{ background: 'linear-gradient(145deg, #16161f 0%, #13131a 100%)', border: '1px solid #2a2a3a', borderRadius: 12, padding: 28, textAlign: 'center' }}>
+            <div style={{ color: '#8888aa', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>Current CIV Ownership</div>
+            <div className="metric-positive" style={{ fontSize: 48, fontWeight: 700, letterSpacing: '-0.02em' }}>
+              {(() => {
+                const latest = investments[investments.length - 1]
+                if (!latest) return 'N/A'
+                const totalShares = investments.reduce((s, inv) => s + Number(inv.civ_shares), 0)
+                const totalCompanyShares = Number(latest.post_money_valuation) / Number(latest.pps)
+                return ((totalShares / totalCompanyShares) * 100).toFixed(2) + '%'
+              })()}
+            </div>
+            <div style={{ color: '#8888aa', fontSize: 13, marginTop: 8 }}>
+              {investments.reduce((s, inv) => s + Number(inv.civ_shares), 0).toLocaleString()} total shares
+            </div>
+          </div>
         </div>
 
 
