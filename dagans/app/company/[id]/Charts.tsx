@@ -9,17 +9,18 @@ function fmt(n: number) {
 }
 
 export function InvestmentBarChart({ investments }: { investments: Investment[] }) {
-  const data = investments.map(inv => ({
-    name: inv.round_name,
-    'Total Invested': inv.civ_amount,
-    'Current Mark': inv.current_mark,
-  }))
+  const totalInvested = investments.reduce((s, inv) => s + Number(inv.civ_amount), 0)
+  const currentMark = investments.reduce((s, inv) => s + Number(inv.current_mark), 0)
+  const data = [
+    { name: 'Total Invested', value: totalInvested, fill: '#3b82f6' },
+    { name: 'Current Mark', value: currentMark, fill: '#22c55e' },
+  ]
 
   return (
     <div>
-      <h4 style={{ color: '#8888aa', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 16 }}>Total Invested vs Current Mark by Round</h4>
+      <h4 style={{ color: '#8888aa', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 16 }}>Total Invested vs Current Mark</h4>
       <ResponsiveContainer width="100%" height={220}>
-        <BarChart data={data} barCategoryGap="30%" barGap={4}>
+        <BarChart data={data} barCategoryGap="40%">
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a3a" vertical={false} />
           <XAxis dataKey="name" tick={{ fill: '#8888aa', fontSize: 12 }} axisLine={false} tickLine={false} />
           <YAxis tickFormatter={fmt} tick={{ fill: '#8888aa', fontSize: 11 }} axisLine={false} tickLine={false} />
@@ -28,9 +29,9 @@ export function InvestmentBarChart({ investments }: { investments: Investment[] 
             labelStyle={{ color: '#f0f0f5', marginBottom: 4 }}
             formatter={(value) => fmt(Number(value))}
           />
-          <Legend wrapperStyle={{ color: '#8888aa', fontSize: 12 }} />
-          <Bar dataKey="Total Invested" fill="#3b82f6" radius={[4,4,0,0]} maxBarSize={50} />
-          <Bar dataKey="Current Mark" fill="#22c55e" radius={[4,4,0,0]} maxBarSize={50} />
+          <Bar dataKey="value" radius={[4,4,0,0]} maxBarSize={80}>
+            {data.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </div>
