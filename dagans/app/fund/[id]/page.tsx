@@ -31,6 +31,7 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
   const totalInvested = companies.reduce((s, c) => s + Number(c.total_invested), 0)
   const currentValue = companies.reduce((s, c) => s + Number(c.current_mark), 0)
   const moic = totalInvested > 0 ? (currentValue / totalInvested).toFixed(2) + 'x' : 'N/A'
+  const corePositions = companies.filter(c => Number(c.current_valuation) > 0 && (Number(c.current_mark) / Number(c.current_valuation)) > 0.10).length
 
   return (
     <div>
@@ -44,6 +45,7 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12, marginBottom: 40 }}>
         {[
           ['Total Positions', companies.length],
+          ['Core Positions', corePositions],
           ['Total Invested', fmt(totalInvested)],
           ['Current Mark', fmt(currentValue)],
           ['Fund MOIC', moic],
@@ -64,6 +66,7 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 12 }}>
         {companies.map(co => {
           const color = SC[co.sector] || '#8888aa'
+          const isCore = Number(co.current_valuation) > 0 && (Number(co.current_mark) / Number(co.current_valuation)) > 0.10
           return (
             <Link key={co.id} href={'/company/' + co.id} style={{ textDecoration: 'none' }}>
               <div className="glow-card" style={{ background: 'linear-gradient(145deg, #16161f 0%, #13131a 100%)', border: '1px solid #2a2a3a', borderRadius: 12, padding: 20, cursor: 'pointer' }}>
@@ -71,8 +74,11 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
                   <div style={{ width: 40, height: 40, borderRadius: 10, background: '#1c1c26', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 700, color, flexShrink: 0 }}>
                     {co.name.charAt(0)}
                   </div>
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: 15 }}>{co.name}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontWeight: 600, fontSize: 15 }}>{co.name}</span>
+                      {isCore && <span style={{ fontSize: 10, fontWeight: 700, color: '#22c55e', background: '#22c55e18', border: '1px solid #22c55e44', padding: '1px 7px', borderRadius: 8, letterSpacing: '0.05em' }}>CORE</span>}
+                    </div>
                     <span style={{ fontSize: 11, color, background: color + '22', padding: '2px 8px', borderRadius: 10 }}>{co.sector}</span>
                   </div>
                 </div>
