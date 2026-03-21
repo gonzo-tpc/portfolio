@@ -31,7 +31,7 @@ export default function LoginPage() {
       <div style={{ width: '100%', maxWidth: 360, padding: 24 }}>
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/civ-logo.jpg" alt="CIV" style={{ height: 48, width: 'auto', filter: 'brightness(0) invert(1)', margin: '0 auto 24px', display: 'block' }} />
+          <img src="/civ-logo.jpg" alt="CIV" style={{ height: 48, width: 'auto', filter: 'invert(1)', mixBlendMode: 'screen', margin: '0 auto 24px', display: 'block' }} />
           <p style={{ color: '#8888aa', fontSize: 14 }}>Enter your password to continue</p>
         </div>
 

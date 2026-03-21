@@ -8,7 +8,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <nav style={{ background: '#13131a', borderBottom: '1px solid #2a2a3a', padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12 }}>
           <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/civ-logo.jpg" alt="CIV" style={{ height: 28, width: 'auto', filter: 'brightness(0) invert(1)' }} />
+            <img src="/civ-logo.jpg" alt="CIV" style={{ height: 28, width: 'auto', filter: 'invert(1)', mixBlendMode: 'screen' }} />
           </a>
           <span style={{ color: '#2a2a3a' }}>|</span>
           <span style={{ color: '#8888aa', fontSize: 14 }}>Portfolio</span>
