@@ -172,30 +172,7 @@ export default function CompanyTabs({ company, investments, companyId }: { compa
               </div>
             ))}
           </div>
-          <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Exit Scenarios</h3>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid #2a2a3a' }}>
-                {['Exit Multiple','Exit Valuation','CIV Return','MOIC'].map(h => (
-                  <th key={h} style={{ color: '#8888aa', fontSize: 11, textTransform: 'uppercase', padding: '0 12px 12px', textAlign: 'left' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[0.5,1,2,3,5,10].map(mult => {
-                const ret = newMark * mult
-                const moic = ret / company.total_invested
-                return (
-                  <tr key={mult} style={{ borderBottom: '1px solid #1c1c26' }}>
-                    <td style={{ padding: 12, color: '#8888aa' }}>{mult}x</td>
-                    <td style={{ padding: 12 }}>{fmt(postMoney * mult)}</td>
-                    <td style={{ padding: 12, color: ret>=company.total_invested?'#22c55e':'#f87171' }}>{fmt(ret)}</td>
-                    <td style={{ padding: 12, fontWeight: 600, color: moic>=1?'#22c55e':'#f87171' }}>{moic.toFixed(2)}x</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+
         </div>
       )}
 
