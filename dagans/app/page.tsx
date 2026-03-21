@@ -35,7 +35,7 @@ export default async function Home() {
                   </div>
                 ))}
               </div>
-              <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid #2a2a3a', color: '#8888aa', fontSize: 13 }}>{m.num_companies} portfolio companies</div>
+              <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid #2a2a3a', color: '#8888aa', fontSize: 13 }}>{m.num_companies} total positions</div>
             </div>
           </Link>
         ))}

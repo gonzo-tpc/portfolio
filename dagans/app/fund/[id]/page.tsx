@@ -43,7 +43,7 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12, marginBottom: 40 }}>
         {[
-          ['Portfolio Companies', companies.length],
+          ['Total Positions', companies.length],
           ['Total Invested', fmt(totalInvested)],
           ['Current Value', fmt(currentValue)],
           ['Fund MOIC', moic],
