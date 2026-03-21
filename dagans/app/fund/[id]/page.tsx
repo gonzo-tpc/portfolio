@@ -12,9 +12,13 @@ function fmt(n: number) {
 
 const SC: Record<string,string> = {
   'Artificial Intelligence': '#818cf8',
+  'Applied AI': '#818cf8',
   'Biotech': '#34d399',
   'Clean Tech': '#fbbf24',
+  'Energy Transition': '#fbbf24',
   'Cybersecurity': '#f87171',
+  'Industrial Automation': '#fb923c',
+  'Digital Infrastructure': '#60a5fa',
   'E-Commerce': '#60a5fa'
 }
 
@@ -61,7 +65,7 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
           return (
             <Link key={co.id} href={'/company/' + co.id} style={{ textDecoration: 'none' }}>
               <div style={{ background: '#13131a', border: '1px solid #2a2a3a', borderRadius: 10, padding: 20, cursor: 'pointer' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
                   <div style={{ width: 40, height: 40, borderRadius: 10, background: '#1c1c26', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 700, color, flexShrink: 0 }}>
                     {co.name.charAt(0)}
                   </div>
@@ -70,6 +74,9 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
                     <span style={{ fontSize: 11, color, background: color + '22', padding: '2px 8px', borderRadius: 10 }}>{co.sector}</span>
                   </div>
                 </div>
+                {co.description && (
+                  <p style={{ color: '#8888aa', fontSize: 12, lineHeight: 1.5, marginBottom: 14 }}>{co.description}</p>
+                )}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
                   {[['Invested', fmt(Number(co.total_invested))], ['Mark', fmt(Number(co.current_mark))], ['MOIC', Number(co.moic).toFixed(2) + 'x']].map(([l, v]) => (
                     <div key={l}>
