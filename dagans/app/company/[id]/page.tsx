@@ -38,8 +38,10 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
       </Link>
 
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 20, marginBottom: 32 }}>
-        <div style={{ width: 64, height: 64, borderRadius: 14, background: '#1c1c26', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, fontWeight: 700, color, flexShrink: 0 }}>
-          {co.name.charAt(0)}
+        <div style={{ width: 64, height: 64, borderRadius: 14, background: '#1c1c26', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, fontWeight: 700, color, flexShrink: 0, overflow: 'hidden' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={`/logos/${co.id}.svg`} alt={co.name} style={{ width: 64, height: 64, borderRadius: 14 }}
+            onError={(e) => { (e.target as HTMLImageElement).style.display='none'; (e.target as HTMLImageElement).parentElement!.innerText = co.name.charAt(0) }} />
         </div>
         <div>
           <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 6 }}>{co.name}</h1>

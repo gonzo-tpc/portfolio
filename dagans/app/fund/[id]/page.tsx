@@ -58,12 +58,15 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 12 }}>
         {companies.map(co => {
           const color = SC[co.sector] || '#8888aa'
+          const logoPath = `/logos/${co.id}.svg`
           return (
             <Link key={co.id} href={'/company/' + co.id} style={{ textDecoration: 'none' }}>
               <div style={{ background: '#13131a', border: '1px solid #2a2a3a', borderRadius: 10, padding: 20, cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: '#1c1c26', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 700, color, flexShrink: 0 }}>
-                    {co.name.charAt(0)}
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: '#1c1c26', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 700, color, flexShrink: 0, overflow: 'hidden' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={logoPath} alt={co.name} style={{ width: 40, height: 40, borderRadius: 10 }}
+                      onError={(e) => { (e.target as HTMLImageElement).style.display='none'; (e.target as HTMLImageElement).parentElement!.innerText = co.name.charAt(0) }} />
                   </div>
                   <div>
                     <div style={{ fontWeight: 600, fontSize: 15 }}>{co.name}</div>
