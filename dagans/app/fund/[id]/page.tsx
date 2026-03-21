@@ -47,10 +47,12 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
           ['Total Invested', fmt(totalInvested)],
           ['Current Mark', fmt(currentValue)],
           ['Fund MOIC', moic],
-        ].map(([label, value]) => (
+          ['TVPI', moic, true],
+        ].map(([label, value, placeholder]) => (
           <div key={String(label)} className="glow-card" style={{ background: 'linear-gradient(145deg, #16161f 0%, #13131a 100%)', border: '1px solid #2a2a3a', borderRadius: 10, padding: 16 }}>
             <div style={{ color: '#8888aa', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>{label}</div>
             <div className="metric-positive" style={{ fontSize: 20, fontWeight: 700 }}>{value}</div>
+            {placeholder && <div style={{ color: '#555566', fontSize: 10, marginTop: 4 }}>excl. expenses</div>}
           </div>
         ))}
       </div>
