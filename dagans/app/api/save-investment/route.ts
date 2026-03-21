@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { calcCompanyIRR } from '@/lib/irr'
 
 export async function POST(req: NextRequest) {
   const supabase = createClient(
@@ -62,7 +63,15 @@ export async function POST(req: NextRequest) {
       const total_invested = sorted.reduce((s, i) => s + Number(i.civ_amount), 0)
       const current_mark = markedInvestments.reduce((s, i) => s + i.mark, 0)
       const moic = total_invested > 0 ? current_mark / total_invested : 0
-      const avg_irr = sorted.reduce((s, i) => s + Number(i.irr), 0) / sorted.length
+
+      // Proper IRR using actual cashflow dates
+      const irrInputs = markedInvestments.map(i => ({
+        date: i.date,
+        civ_amount: Number(i.civ_amount),
+        current_mark: i.mark,
+      }))
+      const irr = calcCompanyIRR(irrInputs) ?? 0
+
       const entry_valuation = Number(sorted[0].post_money_valuation)
       const current_valuation = Number(latest.post_money_valuation)
 
@@ -72,7 +81,7 @@ export async function POST(req: NextRequest) {
           total_invested,
           current_mark,
           moic,
-          irr: avg_irr,
+          irr,
           entry_valuation,
           current_valuation,
           initial_investment_date: sorted[0].date,
