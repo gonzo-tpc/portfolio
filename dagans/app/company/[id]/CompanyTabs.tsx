@@ -13,7 +13,7 @@ function fmt(n: number) {
   return '$' + n.toFixed(0)
 }
 
-const TABS = ['Investment History', 'Co-Investors', 'Cap Table', 'Sensitivity', 'Team', 'Documents']
+const TABS = ['Investment History', 'Team', 'Co-Investors', 'Cap Table', 'Sensitivity', 'Documents']
 const SC = ['#818cf8','#60a5fa','#f59e0b','#f87171','#34d399','#e879f9']
 
 export default function CompanyTabs({ company, investments, companyId }: { company: Company, investments: Investment[], companyId: string, companyName?: string }) {
