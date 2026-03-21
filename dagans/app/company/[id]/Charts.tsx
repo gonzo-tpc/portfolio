@@ -1,5 +1,5 @@
 'use client'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, Legend, Cell } from 'recharts'
+import { ComposedChart, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, Legend, Cell } from 'recharts'
 import { Investment } from '@/types'
 
 function fmt(n: number) {
@@ -19,7 +19,7 @@ export function InvestmentBarChart({ investments }: { investments: Investment[] 
     <div>
       <h4 style={{ color: '#8888aa', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 16 }}>CIV Invested & MOIC by Round</h4>
       <ResponsiveContainer width="100%" height={220}>
-        <BarChart data={data}>
+        <ComposedChart data={data} barCategoryGap="30%">
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a3a" vertical={false} />
           <XAxis dataKey="name" tick={{ fill: '#8888aa', fontSize: 12 }} axisLine={false} tickLine={false} />
           <YAxis yAxisId="left" tickFormatter={fmt} tick={{ fill: '#8888aa', fontSize: 11 }} axisLine={false} tickLine={false} />
@@ -30,13 +30,13 @@ export function InvestmentBarChart({ investments }: { investments: Investment[] 
             formatter={(value, name) => name === 'moic' ? Number(value).toFixed(2) + 'x' : fmt(Number(value))}
           />
           <Legend wrapperStyle={{ color: '#8888aa', fontSize: 12 }} />
-          <Bar yAxisId="left" dataKey="CIV Invested" radius={[4,4,0,0]}>
+          <Bar yAxisId="left" dataKey="CIV Invested" radius={[4,4,0,0]} maxBarSize={60}>
             {data.map((entry, i) => (
               <Cell key={i} fill={entry.moic >= 2 ? '#22c55e' : entry.moic >= 1 ? '#3b82f6' : '#f87171'} />
             ))}
           </Bar>
           <Line yAxisId="right" type="monotone" dataKey="moic" stroke="#fbbf24" strokeWidth={2} dot={{ fill: '#fbbf24', r: 4 }} activeDot={{ r: 6 }} name="MOIC" />
-        </BarChart>
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   )
