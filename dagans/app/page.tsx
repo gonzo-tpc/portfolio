@@ -28,7 +28,7 @@ export default async function Home() {
                 <span style={{ background: '#16a34a22', color: '#22c55e', fontSize: 12, padding: '4px 12px', borderRadius: 20, fontWeight: 600 }}>Active</span>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
-                {[['Total Invested', fmt(m.total_invested)], ['Current Value', fmt(m.current_value)], ['MOIC', m.moic.toFixed(2) + 'x'], ['TVPI', m.tvpi.toFixed(2) + 'x'], ['Gross IRR', (m.gross_irr*100).toFixed(1) + '%'], ['Net IRR', (m.net_irr*100).toFixed(1) + '%']].map(([label, value]) => (
+                {[['Total Invested', fmt(m.total_invested)], ['Current Mark', fmt(m.current_value)], ['MOIC', m.moic.toFixed(2) + 'x'], ['TVPI', m.tvpi.toFixed(2) + 'x'], ['Gross IRR', (m.gross_irr*100).toFixed(1) + '%'], ['Net IRR', (m.net_irr*100).toFixed(1) + '%']].map(([label, value]) => (
                   <div key={label}>
                     <div style={{ color: '#8888aa', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>{label}</div>
                     <div style={{ color: '#f0f0f5', fontSize: 18, fontWeight: 600 }}>{value}</div>

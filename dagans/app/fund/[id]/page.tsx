@@ -45,7 +45,7 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
         {[
           ['Total Positions', companies.length],
           ['Total Invested', fmt(totalInvested)],
-          ['Current Value', fmt(currentValue)],
+          ['Current Mark', fmt(currentValue)],
           ['Fund MOIC', moic],
         ].map(([label, value]) => (
           <div key={String(label)} className="glow-card" style={{ background: 'linear-gradient(145deg, #16161f 0%, #13131a 100%)', border: '1px solid #2a2a3a', borderRadius: 10, padding: 16 }}>
