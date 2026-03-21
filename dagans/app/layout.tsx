@@ -6,11 +6,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body style={{ minHeight: '100vh', background: '#0a0a0f' }}>
         <nav style={{ background: '#13131a', borderBottom: '1px solid #2a2a3a', padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <div style={{ background: '#22c55e', width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ color: '#000', fontWeight: 800, fontSize: 16 }}>C</span>
-            </div>
-            <span style={{ color: '#f0f0f5', fontWeight: 700, fontSize: 18, letterSpacing: '-0.02em' }}>CIV</span>
+          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/civ-logo.jpg" alt="CIV" style={{ height: 28, width: 'auto', filter: 'brightness(0) invert(1)' }} />
           </a>
           <span style={{ color: '#2a2a3a' }}>|</span>
           <span style={{ color: '#8888aa', fontSize: 14 }}>Portfolio</span>

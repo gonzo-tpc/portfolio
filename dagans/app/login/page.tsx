@@ -30,10 +30,8 @@ export default function LoginPage() {
     <div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ width: '100%', maxWidth: 360, padding: 24 }}>
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <div style={{ background: '#22c55e', width: 48, height: 48, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-            <span style={{ color: '#000', fontWeight: 800, fontSize: 22 }}>C</span>
-          </div>
-          <h1 style={{ color: '#f0f0f5', fontSize: 22, fontWeight: 700, marginBottom: 6 }}>CIV Portfolio</h1>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/civ-logo.jpg" alt="CIV" style={{ height: 48, width: 'auto', filter: 'brightness(0) invert(1)', margin: '0 auto 24px', display: 'block' }} />
           <p style={{ color: '#8888aa', fontSize: 14 }}>Enter your password to continue</p>
         </div>
 
