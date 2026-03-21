@@ -43,17 +43,15 @@ export function OwnershipChart({ investments }: { investments: Investment[] }) {
   const data = investments.map(inv => {
     runningShares += inv.civ_shares
     const totalShares = inv.post_money_valuation / inv.pps
-    const cumulative = parseFloat(((runningShares / totalShares) * 100).toFixed(2))
     return {
       name: inv.round_name,
-      'This Round': parseFloat(inv.civ_ownership_pct.toFixed(2)),
-      'Cumulative': cumulative,
+      'Ownership': parseFloat(((runningShares / totalShares) * 100).toFixed(2)),
     }
   })
 
   return (
     <div>
-      <h4 style={{ color: '#8888aa', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 16 }}>CIV Ownership % Over Rounds</h4>
+      <h4 style={{ color: '#8888aa', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 16 }}>CIV Ownership Over Time</h4>
       <ResponsiveContainer width="100%" height={220}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a3a" vertical={false} />
@@ -64,9 +62,7 @@ export function OwnershipChart({ investments }: { investments: Investment[] }) {
             labelStyle={{ color: '#f0f0f5', marginBottom: 4 }}
             formatter={(value) => Number(value).toFixed(2) + '%'}
           />
-          <Legend wrapperStyle={{ color: '#8888aa', fontSize: 12 }} />
-          <Line type="monotone" dataKey="This Round" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6', r: 4 }} activeDot={{ r: 6 }} />
-          <Line type="monotone" dataKey="Cumulative" stroke="#22c55e" strokeWidth={2} dot={{ fill: '#22c55e', r: 4 }} strokeDasharray="5 5" activeDot={{ r: 6 }} />
+          <Line type="monotone" dataKey="Ownership" stroke="#22c55e" strokeWidth={2} dot={{ fill: '#22c55e', r: 4 }} activeDot={{ r: 6 }} />
         </LineChart>
       </ResponsiveContainer>
     </div>
