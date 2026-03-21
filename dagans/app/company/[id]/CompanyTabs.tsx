@@ -21,15 +21,25 @@ export default function CompanyTabs({ company, investments, companyId }: { compa
   const [hoveredInv, setHoveredInv] = useState<string|null>(null)
   const [newRound, setNewRound] = useState(20000000)
   const [preMoney, setPreMoney] = useState(company.current_valuation)
+  const [followOn, setFollowOn] = useState(0)
 
   const allCIs = investments.flatMap(inv => inv.co_investors.map(ci => ({ ...ci, round: inv.round_name })))
   const uniqueCIs = allCIs.filter((ci, i, arr) => arr.findIndex(x => x.name === ci.name) === i)
 
   const postMoney = preMoney + newRound
   const curOwn = (company.current_mark / company.current_valuation) * 100
-  const newOwn = curOwn * (preMoney / postMoney)
-  const dilution = curOwn - newOwn
-  const newMark = (newOwn / 100) * postMoney
+  // If you pass: diluted ownership
+  const dilutedOwn = curOwn * (preMoney / postMoney)
+  const dilution = curOwn - dilutedOwn
+  // Pro-rata = invest enough to maintain current ownership
+  const proRata = curOwn / 100 * newRound
+  // If you invest followOn: ownership from new investment + diluted existing
+  const followOnOwn = followOn > 0 ? (followOn / postMoney) * 100 : 0
+  const totalOwnAfterFollowOn = dilutedOwn + followOnOwn
+  // Mark after follow-on = diluted existing mark + new investment
+  const markAfterFollowOn = (dilutedOwn / 100) * postMoney + followOn
+  // Cost per 1% from follow-on
+  const costPer1Pct = followOnOwn > 0 ? followOn / followOnOwn : 0
 
   return (
     <div>
@@ -148,31 +158,63 @@ export default function CompanyTabs({ company, investments, companyId }: { compa
 
       {tab === 'Sensitivity' && (
         <div>
-          <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 20 }}>New Round Dilution</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 28 }}>
-            <div>
-              <label style={{ display: 'block', color: '#8888aa', fontSize: 12, marginBottom: 6 }}>New Round Size ($)</label>
-              <input type="number" value={newRound} onChange={e => setNewRound(Number(e.target.value))} style={{ width: '100%', background: '#1c1c26', border: '1px solid #2a2a3a', borderRadius: 8, padding: '10px 12px', color: '#f0f0f5', fontSize: 14 }} />
-            </div>
+          {/* Step 1: New Round */}
+          <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 16, color: '#f0f0f5' }}>New Round</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }}>
             <div>
               <label style={{ display: 'block', color: '#8888aa', fontSize: 12, marginBottom: 6 }}>Pre-Money Valuation ($)</label>
               <input type="number" value={preMoney} onChange={e => setPreMoney(Number(e.target.value))} style={{ width: '100%', background: '#1c1c26', border: '1px solid #2a2a3a', borderRadius: 8, padding: '10px 12px', color: '#f0f0f5', fontSize: 14 }} />
             </div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 32 }}>
-            {[
-              { label: 'Post-Money Val', value: fmt(postMoney), color: '' },
-              { label: 'Current Ownership', value: curOwn.toFixed(2)+'%', color: '' },
-              { label: 'New Ownership', value: newOwn.toFixed(2)+'%', color: '' },
-              { label: 'Dilution', value: '-'+dilution.toFixed(2)+'%', color: '#f87171' },
-            ].map(item => (
-              <div key={item.label} style={{ background: '#1c1c26', borderRadius: 10, padding: 16 }}>
-                <div style={{ color: '#8888aa', fontSize: 11, marginBottom: 6 }}>{item.label}</div>
-                <div style={{ color: item.color||'#f0f0f5', fontSize: 20, fontWeight: 600 }}>{item.value}</div>
-              </div>
-            ))}
+            <div>
+              <label style={{ display: 'block', color: '#8888aa', fontSize: 12, marginBottom: 6 }}>Round Size ($)</label>
+              <input type="number" value={newRound} onChange={e => setNewRound(Number(e.target.value))} style={{ width: '100%', background: '#1c1c26', border: '1px solid #2a2a3a', borderRadius: 8, padding: '10px 12px', color: '#f0f0f5', fontSize: 14 }} />
+            </div>
           </div>
 
+          {/* If you pass */}
+          <div style={{ background: '#1c1c26', borderRadius: 10, padding: 16, marginBottom: 24 }}>
+            <div style={{ color: '#8888aa', fontSize: 12, marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>If you pass</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+              {[
+                { label: 'Post-Money', value: fmt(postMoney) },
+                { label: 'Your Ownership', value: dilutedOwn.toFixed(2) + '%' },
+                { label: 'Dilution', value: '−' + dilution.toFixed(2) + '%', red: true },
+                { label: 'Your Mark', value: fmt((dilutedOwn / 100) * postMoney) },
+              ].map(item => (
+                <div key={item.label}>
+                  <div style={{ color: '#8888aa', fontSize: 11, marginBottom: 4 }}>{item.label}</div>
+                  <div style={{ color: item.red ? '#f87171' : '#f0f0f5', fontSize: 18, fontWeight: 600 }}>{item.value}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Step 2: Follow-on */}
+          <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 8, color: '#f0f0f5' }}>Model Your Follow-On</h3>
+          <div style={{ color: '#8888aa', fontSize: 12, marginBottom: 14 }}>Pro-rata to maintain ownership: <span style={{ color: '#22c55e', fontWeight: 600 }}>{fmt(proRata)}</span></div>
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ display: 'block', color: '#8888aa', fontSize: 12, marginBottom: 6 }}>Your Follow-On Amount ($)</label>
+            <input type="number" value={followOn} onChange={e => setFollowOn(Number(e.target.value))} placeholder="0" style={{ width: '100%', background: '#1c1c26', border: '1px solid #2a2a3a', borderRadius: 8, padding: '10px 12px', color: '#f0f0f5', fontSize: 14 }} />
+          </div>
+
+          {followOn > 0 && (
+            <div style={{ background: '#16261a', border: '1px solid #22c55e33', borderRadius: 10, padding: 16 }}>
+              <div style={{ color: '#22c55e', fontSize: 12, marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>If you invest {fmt(followOn)}</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+                {[
+                  { label: 'New Ownership', value: totalOwnAfterFollowOn.toFixed(2) + '%' },
+                  { label: 'Ownership Δ', value: (totalOwnAfterFollowOn > curOwn ? '+' : '') + (totalOwnAfterFollowOn - curOwn).toFixed(2) + '%' },
+                  { label: 'Your Mark', value: fmt(markAfterFollowOn) },
+                  { label: 'Cost per 1%', value: fmt(costPer1Pct) },
+                ].map(item => (
+                  <div key={item.label}>
+                    <div style={{ color: '#8888aa', fontSize: 11, marginBottom: 4 }}>{item.label}</div>
+                    <div className="metric-positive" style={{ fontSize: 18, fontWeight: 600 }}>{item.value}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
