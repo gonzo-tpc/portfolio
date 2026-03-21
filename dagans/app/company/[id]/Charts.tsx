@@ -11,32 +11,27 @@ function fmt(n: number) {
 export function InvestmentBarChart({ investments }: { investments: Investment[] }) {
   const data = investments.map(inv => ({
     name: inv.round_name,
-    'CIV Invested': inv.civ_amount,
-    moic: parseFloat(inv.moic.toFixed(2)),
+    'Total Invested': inv.civ_amount,
+    'Current Mark': inv.current_mark,
   }))
 
   return (
     <div>
-      <h4 style={{ color: '#8888aa', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 16 }}>CIV Invested & MOIC by Round</h4>
+      <h4 style={{ color: '#8888aa', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 16 }}>Total Invested vs Current Mark by Round</h4>
       <ResponsiveContainer width="100%" height={220}>
-        <ComposedChart data={data} barCategoryGap="30%">
+        <BarChart data={data} barCategoryGap="30%" barGap={4}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a3a" vertical={false} />
           <XAxis dataKey="name" tick={{ fill: '#8888aa', fontSize: 12 }} axisLine={false} tickLine={false} />
-          <YAxis yAxisId="left" tickFormatter={fmt} tick={{ fill: '#8888aa', fontSize: 11 }} axisLine={false} tickLine={false} />
-          <YAxis yAxisId="right" orientation="right" tickFormatter={v => v.toFixed(1) + 'x'} tick={{ fill: '#8888aa', fontSize: 11 }} axisLine={false} tickLine={false} />
+          <YAxis tickFormatter={fmt} tick={{ fill: '#8888aa', fontSize: 11 }} axisLine={false} tickLine={false} />
           <Tooltip
             contentStyle={{ background: '#13131a', border: '1px solid #2a2a3a', borderRadius: 8 }}
             labelStyle={{ color: '#f0f0f5', marginBottom: 4 }}
-            formatter={(value, name) => name === 'moic' ? Number(value).toFixed(2) + 'x' : fmt(Number(value))}
+            formatter={(value) => fmt(Number(value))}
           />
           <Legend wrapperStyle={{ color: '#8888aa', fontSize: 12 }} />
-          <Bar yAxisId="left" dataKey="CIV Invested" radius={[4,4,0,0]} maxBarSize={60}>
-            {data.map((entry, i) => (
-              <Cell key={i} fill={entry.moic >= 2 ? '#22c55e' : entry.moic >= 1 ? '#3b82f6' : '#f87171'} />
-            ))}
-          </Bar>
-          <Line yAxisId="right" type="monotone" dataKey="moic" stroke="#fbbf24" strokeWidth={2} dot={{ fill: '#fbbf24', r: 4 }} activeDot={{ r: 6 }} name="MOIC" />
-        </ComposedChart>
+          <Bar dataKey="Total Invested" fill="#3b82f6" radius={[4,4,0,0]} maxBarSize={50} />
+          <Bar dataKey="Current Mark" fill="#22c55e" radius={[4,4,0,0]} maxBarSize={50} />
+        </BarChart>
       </ResponsiveContainer>
     </div>
   )
