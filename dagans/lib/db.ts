@@ -11,7 +11,7 @@ export async function getFunds(): Promise<Fund[]> {
 
 export async function getCompanies(fundId?: string): Promise<Company[]> {
   try {
-    let query = supabase.from('companies').select('*').order('name')
+    let query = supabase.from('companies').select('*').order('total_invested', { ascending: false })
     if (fundId) query = query.eq('fund_id', fundId)
     const { data, error } = await query
     if (error) { console.error('getCompanies:', error); return [] }
