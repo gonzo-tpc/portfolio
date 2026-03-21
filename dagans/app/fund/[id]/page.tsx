@@ -48,9 +48,9 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
           ['Current Value', fmt(currentValue)],
           ['Fund MOIC', moic],
         ].map(([label, value]) => (
-          <div key={String(label)} style={{ background: '#13131a', border: '1px solid #2a2a3a', borderRadius: 10, padding: 16 }}>
+          <div key={String(label)} className="glow-card" style={{ background: 'linear-gradient(145deg, #16161f 0%, #13131a 100%)', border: '1px solid #2a2a3a', borderRadius: 10, padding: 16 }}>
             <div style={{ color: '#8888aa', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>{label}</div>
-            <div style={{ color: '#f0f0f5', fontSize: 20, fontWeight: 600 }}>{value}</div>
+            <div className="metric-positive" style={{ fontSize: 20, fontWeight: 700 }}>{value}</div>
           </div>
         ))}
       </div>
@@ -64,7 +64,7 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
           const color = SC[co.sector] || '#8888aa'
           return (
             <Link key={co.id} href={'/company/' + co.id} style={{ textDecoration: 'none' }}>
-              <div style={{ background: '#13131a', border: '1px solid #2a2a3a', borderRadius: 10, padding: 20, cursor: 'pointer' }}>
+              <div className="glow-card" style={{ background: 'linear-gradient(145deg, #16161f 0%, #13131a 100%)', border: '1px solid #2a2a3a', borderRadius: 12, padding: 20, cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
                   <div style={{ width: 40, height: 40, borderRadius: 10, background: '#1c1c26', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 700, color, flexShrink: 0 }}>
                     {co.name.charAt(0)}
@@ -78,10 +78,10 @@ export default async function FundPage({ params }: { params: Promise<{ id: strin
                   <p style={{ color: '#8888aa', fontSize: 12, lineHeight: 1.5, marginBottom: 14 }}>{co.description}</p>
                 )}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-                  {[['Invested', fmt(Number(co.total_invested))], ['Mark', fmt(Number(co.current_mark))], ['MOIC', Number(co.moic).toFixed(2) + 'x']].map(([l, v]) => (
-                    <div key={l}>
+                  {[['Invested', fmt(Number(co.total_invested)), false], ['Mark', fmt(Number(co.current_mark)), true], ['MOIC', Number(co.moic).toFixed(2) + 'x', Number(co.moic) >= 1]].map(([l, v, pos]) => (
+                    <div key={String(l)}>
                       <div style={{ color: '#8888aa', fontSize: 10, textTransform: 'uppercase', marginBottom: 2 }}>{l}</div>
-                      <div style={{ fontSize: 14, fontWeight: 600 }}>{v}</div>
+                      <div className={l === 'MOIC' ? (pos ? 'metric-positive' : 'metric-negative') : ''} style={{ fontSize: 14, fontWeight: 600, color: l === 'MOIC' ? undefined : '#f0f0f5' }}>{v}</div>
                     </div>
                   ))}
                 </div>

@@ -5,7 +5,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body style={{ minHeight: '100vh', background: '#0a0a0f' }}>
-        <nav style={{ background: '#000', borderBottom: '1px solid #1a1a1a', padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12 }}>
+        <nav style={{ background: 'linear-gradient(180deg, #0d0d14 0%, #0a0a0f 100%)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12, backdropFilter: 'blur(12px)', position: 'sticky', top: 0, zIndex: 50 }}>
           <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/civ-logo.png" alt="CIV" style={{ height: 28, width: 'auto', background: '#000', padding: '4px 8px', borderRadius: 6 }} />

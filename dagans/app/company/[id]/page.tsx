@@ -53,18 +53,18 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12, marginBottom: 32 }}>
         {([
           ['Total Invested', fmt(Number(co.total_invested)), ''],
-          ['Current Mark', fmt(Number(co.current_mark)), ''],
+          ['Current Mark', fmt(Number(co.current_mark)), 'positive'],
           ['Entry Valuation', fmt(Number(co.entry_valuation)), ''],
           ['Current Valuation', fmt(Number(co.current_valuation)), ''],
-          ['MOIC', Number(co.moic).toFixed(2) + 'x', Number(co.moic) >= 1 ? '#22c55e' : '#f87171'],
-          ['IRR', (Number(co.irr) * 100).toFixed(1) + '%', Number(co.irr) >= 0 ? '#22c55e' : '#f87171'],
+          ['MOIC', Number(co.moic).toFixed(2) + 'x', Number(co.moic) >= 1 ? 'positive' : 'negative'],
+          ['IRR', (Number(co.irr) * 100).toFixed(1) + '%', Number(co.irr) >= 0 ? 'positive' : 'negative'],
           ['First Investment', co.initial_investment_date || '', ''],
           ['Latest Investment', co.latest_investment_date || '', ''],
-          ['Current Ownership', currentOwnership, '#22c55e'],
+          ['Current Ownership', currentOwnership, 'positive'],
         ] as [string, string, string][]).map(([label, value, clr]) => (
-          <div key={label} style={{ background: '#13131a', border: '1px solid #2a2a3a', borderRadius: 10, padding: 16 }}>
+          <div key={label} className="glow-card" style={{ background: 'linear-gradient(145deg, #16161f 0%, #13131a 100%)', border: '1px solid #2a2a3a', borderRadius: 10, padding: 16 }}>
             <div style={{ color: '#8888aa', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>{label}</div>
-            <div style={{ color: clr || '#f0f0f5', fontSize: 16, fontWeight: 600 }}>{value}</div>
+            <div className={clr === 'positive' ? 'metric-positive' : clr === 'negative' ? 'metric-negative' : ''} style={{ fontSize: 16, fontWeight: 600, color: !clr ? '#f0f0f5' : undefined }}>{value}</div>
           </div>
         ))}
       </div>
